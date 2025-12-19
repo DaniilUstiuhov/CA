@@ -1,0 +1,49 @@
+# Build outputs
+bin/
+obj/
+out/
+TestResults/
+artifacts/
+publish/
+
+# IDE state
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.iml
+
+# VS Code workspace settings (uncomment to keep curated files)
+.vscode/
+
+# Packages
+packages/
+*.nupkg
+
+# Logs and local data
+logs/
+*.log
+*.tmp
+*.pid
+*.db
+*.db-shm
+*.db-wal
+
+# Coverage
+coverage/
+coverage*/
+*.coverage
+*.coveragexml
+*.opencover.xml
+*.lcov
+
+# Resharper / Rider caches
+_ReSharper*/
+*.resharper
+
+# OS noise
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
