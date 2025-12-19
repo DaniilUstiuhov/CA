@@ -1,0 +1,194 @@
+<UserControl x:Class="CulinaryAssistant.UI.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <Style x:Key="StatCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBrush}"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="8"/>
+        </Style>
+        
+        <Style x:Key="StatValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="36"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+        </Style>
+        
+        <Style x:Key="StatLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}"/>
+            <Setter Property="Margin" Value="0,4,0,0"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Заголовок -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock Text="Добро пожаловать!" 
+                       FontSize="28" FontWeight="Bold" 
+                       Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Обзор вашей кулинарной коллекции" 
+                       FontSize="14" 
+                       Foreground="{DynamicResource MutedTextBrush}"
+                       Margin="0,4,0,0"/>
+        </StackPanel>
+        
+        <!-- Статистика -->
+        <UniformGrid Grid.Row="1" Columns="4" Margin="-8,0">
+            <!-- Рецепты -->
+            <Border Style="{StaticResource StatCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="📖" FontSize="24"/>
+                    <TextBlock Text="{Binding Dashboard.TotalRecipes, FallbackValue=0}" 
+                               Style="{StaticResource StatValueStyle}"/>
+                    <TextBlock Text="Рецептов" Style="{StaticResource StatLabelStyle}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Text="{Binding Dashboard.PublishedRecipes, StringFormat='{}{0} опубл.'}" 
+                                   FontSize="12" Foreground="{DynamicResource SuccessBrush}"/>
+                        <TextBlock Text=" · " FontSize="12" Foreground="{DynamicResource MutedTextBrush}"/>
+                        <TextBlock Text="{Binding Dashboard.DraftRecipes, StringFormat='{}{0} черн.'}" 
+                                   FontSize="12" Foreground="{DynamicResource WarningBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            
+            <!-- Инвентарь -->
+            <Border Style="{StaticResource StatCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="📦" FontSize="24"/>
+                    <TextBlock Text="{Binding Dashboard.TotalInventoryItems, FallbackValue=0}" 
+                               Style="{StaticResource StatValueStyle}"/>
+                    <TextBlock Text="Продуктов" Style="{StaticResource StatLabelStyle}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Text="{Binding Dashboard.ExpiredItems, StringFormat='{}{0} просрочено'}" 
+                                   FontSize="12" Foreground="{DynamicResource DangerBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            
+            <!-- Списки покупок -->
+            <Border Style="{StaticResource StatCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="🛒" FontSize="24"/>
+                    <TextBlock Text="{Binding Dashboard.ActiveShoppingLists, FallbackValue=0}" 
+                               Style="{StaticResource StatValueStyle}"/>
+                    <TextBlock Text="Активных списков" Style="{StaticResource StatLabelStyle}"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- Категории -->
+            <Border Style="{StaticResource StatCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="🏷️" FontSize="24"/>
+                    <TextBlock Text="{Binding Dashboard.TotalCategories, FallbackValue=0}" 
+                               Style="{StaticResource StatValueStyle}"/>
+                    <TextBlock Text="Категорий" Style="{StaticResource StatLabelStyle}"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+        
+        <!-- Панели с деталями -->
+        <Grid Grid.Row="2" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Последние рецепты -->
+            <Border Grid.Column="0" Style="{StaticResource StatCardStyle}" Margin="0,8,8,8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="Последние рецепты" 
+                               FontSize="16" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextBrush}"
+                               Margin="0,0,0,12"/>
+                    
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Dashboard.RecentRecipes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="12" Margin="0,0,0,8" 
+                                        Background="{DynamicResource BackgroundBrush}"
+                                        CornerRadius="8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Medium"
+                                                       Foreground="{DynamicResource TextBrush}"/>
+                                            <TextBlock Text="{Binding Cuisine}" FontSize="12"
+                                                       Foreground="{DynamicResource MutedTextBrush}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="{Binding CookingTimeMinutes, StringFormat='{}{0} мин'}"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Border>
+            
+            <!-- Истекающие продукты -->
+            <Border Grid.Column="1" Style="{StaticResource StatCardStyle}" Margin="8,8,0,8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="⚠️ Истекает срок годности" 
+                               FontSize="16" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextBrush}"
+                               Margin="0,0,0,12"/>
+                    
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Dashboard.ExpiringItems}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="12" Margin="0,0,0,8" 
+                                        Background="{DynamicResource BackgroundBrush}"
+                                        CornerRadius="8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Medium"
+                                                       Foreground="{DynamicResource TextBrush}"/>
+                                            <TextBlock Text="{Binding StorageLocation}" FontSize="12"
+                                                       Foreground="{DynamicResource MutedTextBrush}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="{Binding DaysUntilExpiration, StringFormat='{}{0} дн.'}"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource WarningBrush}"
+                                                   FontWeight="SemiBold"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

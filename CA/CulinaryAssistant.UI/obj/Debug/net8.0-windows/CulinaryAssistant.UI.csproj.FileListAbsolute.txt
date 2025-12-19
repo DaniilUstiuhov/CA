@@ -1,0 +1,11 @@
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\CulinaryAssistant.UI.csproj.AssemblyReference.cache
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\Views\DashboardView.baml
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\MainWindow.g.cs
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\Views\DashboardView.g.cs
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\Views\InventoryView.g.cs
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\Views\RecipeDetailView.g.cs
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\Views\RecipeListView.g.cs
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\CulinaryAssistant.UI_MarkupCompile.cache
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.UI\obj\Debug\net8.0-windows\CulinaryAssistant.UI_MarkupCompile.lref

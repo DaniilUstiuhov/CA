@@ -1,0 +1,5 @@
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Infrastructure\obj\Debug\net8.0\CulinaryAssistant.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Infrastructure\obj\Debug\net8.0\CulinaryAssistant.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Infrastructure\obj\Debug\net8.0\CulinaryAssistant.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Infrastructure\obj\Debug\net8.0\CulinaryAssistant.Infrastructure.AssemblyInfo.cs
+C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Infrastructure\obj\Debug\net8.0\CulinaryAssistant.Infrastructure.csproj.CoreCompileInputs.cache

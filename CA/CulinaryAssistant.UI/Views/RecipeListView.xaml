@@ -1,0 +1,178 @@
+<UserControl x:Class="CulinaryAssistant.UI.Views.RecipeListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:CulinaryAssistant.UI.Converters"
+             mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
+        <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Заголовок и кнопка создания -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Рецепты" 
+                           FontSize="28" FontWeight="Bold" 
+                           Foreground="{DynamicResource TextBrush}"/>
+                <TextBlock Text="{Binding Recipes.Count, StringFormat='Всего: {0} рецептов'}" 
+                           FontSize="14" 
+                           Foreground="{DynamicResource MutedTextBrush}"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+            
+            <Button Grid.Column="1" 
+                    Content="+ Новый рецепт" 
+                    Command="{Binding CreateRecipeCommand}"
+                    Style="{DynamicResource PrimaryButtonStyle}"/>
+        </Grid>
+        
+        <!-- Фильтры -->
+        <Border Grid.Row="1" 
+                Background="{DynamicResource CardBrush}" 
+                CornerRadius="12" 
+                Padding="16" 
+                Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Поиск -->
+                <TextBox Grid.Column="0" 
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{DynamicResource SearchTextBoxStyle}"
+                         Margin="0,0,12,0"/>
+                
+                <!-- Фильтр по статусу -->
+                <ComboBox Grid.Column="1" 
+                          ItemsSource="{Binding Statuses}"
+                          SelectedItem="{Binding SelectedStatus}"
+                          DisplayMemberPath="."
+                          Width="150"
+                          Margin="0,0,12,0"/>
+                
+                <!-- Фильтр по типу блюда -->
+                <ComboBox Grid.Column="2" 
+                          ItemsSource="{Binding DishTypes}"
+                          SelectedItem="{Binding SelectedDishType}"
+                          DisplayMemberPath="."
+                          Width="150"
+                          Margin="0,0,12,0"/>
+                
+                <!-- Кнопка сброса -->
+                <Button Grid.Column="3" 
+                        Content="Сбросить" 
+                        Command="{Binding ResetFiltersCommand}"
+                        Style="{DynamicResource SecondaryButtonStyle}"/>
+            </Grid>
+        </Border>
+        
+        <!-- Список рецептов -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Recipes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource CardBrush}" 
+                                CornerRadius="12" 
+                                Padding="20" 
+                                Margin="0,0,0,12"
+                                Cursor="Hand">
+                            <Border.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" 
+                                              Command="{Binding DataContext.OpenRecipeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                              CommandParameter="{Binding}"/>
+                            </Border.InputBindings>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Grid.Column="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" 
+                                                   FontSize="18" FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource TextBrush}"/>
+                                        <Border Background="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
+                                                CornerRadius="4" Padding="8,2" Margin="12,0,0,0"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Status, Converter={StaticResource EnumToStringConverter}}" 
+                                                       FontSize="11" Foreground="White"/>
+                                        </Border>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                        <TextBlock Text="{Binding Cuisine}" 
+                                                   FontSize="13" 
+                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                        <TextBlock Text=" · " 
+                                                   FontSize="13" 
+                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                        <TextBlock Text="{Binding DishType, Converter={StaticResource EnumToStringConverter}}" 
+                                                   FontSize="13" 
+                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                        <TextBlock Text=" · " 
+                                                   FontSize="13" 
+                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                        <TextBlock Text="{Binding CookingTimeMinutes, StringFormat='{}{0} мин'}" 
+                                                   FontSize="13" 
+                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                    </StackPanel>
+                                    
+                                    <TextBlock Text="{Binding Code, StringFormat='Код: {0}'}" 
+                                               FontSize="12" 
+                                               Foreground="{DynamicResource MutedTextBrush}"
+                                               Margin="0,6,0,0"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Column="1" 
+                                            Orientation="Horizontal" 
+                                            VerticalAlignment="Center">
+                                    <Button Content="✏️" 
+                                            ToolTip="Редактировать"
+                                            Command="{Binding DataContext.EditRecipeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{DynamicResource IconButtonStyle}"
+                                            Margin="0,0,8,0"/>
+                                    <Button Content="🗑️" 
+                                            ToolTip="Удалить"
+                                            Command="{Binding DataContext.DeleteRecipeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{DynamicResource IconButtonStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        
+        <!-- Индикатор загрузки -->
+        <Border Grid.Row="2" 
+                Background="#80000000" 
+                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Загрузка..." FontSize="16" Foreground="White"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

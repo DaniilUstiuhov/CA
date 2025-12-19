@@ -1,0 +1,11 @@
+using System.Windows.Controls;
+
+namespace CulinaryAssistant.UI.Views;
+
+public partial class ShoppingListView : UserControl
+{
+    public ShoppingListView()
+    {
+        InitializeComponent();
+    }
+}
