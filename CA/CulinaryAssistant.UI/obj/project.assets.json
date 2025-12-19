@@ -2488,11 +2488,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.UI\\CulinaryAssistant.UI.csproj",
+      "projectUniqueName": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.UI\\CulinaryAssistant.UI.csproj",
       "projectName": "CulinaryAssistant.UI",
-      "projectPath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.UI\\CulinaryAssistant.UI.csproj",
+      "projectPath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.UI\\CulinaryAssistant.UI.csproj",
       "packagesPath": "C:\\Users\\molot\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.UI\\obj\\",
+      "outputPath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.UI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2514,14 +2514,14 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Application\\CulinaryAssistant.Application.csproj": {
-              "projectPath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Application\\CulinaryAssistant.Application.csproj"
+            "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Application\\CulinaryAssistant.Application.csproj": {
+              "projectPath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Application\\CulinaryAssistant.Application.csproj"
             },
-            "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj": {
-              "projectPath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj"
+            "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj": {
+              "projectPath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj"
             },
-            "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Infrastructure\\CulinaryAssistant.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Infrastructure\\CulinaryAssistant.Infrastructure.csproj"
+            "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Infrastructure\\CulinaryAssistant.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Infrastructure\\CulinaryAssistant.Infrastructure.csproj"
             }
           }
         }

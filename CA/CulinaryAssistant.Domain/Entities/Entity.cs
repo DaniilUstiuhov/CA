@@ -9,7 +9,7 @@ public abstract class Entity
     public DateTime CreatedAt { get; protected set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; protected set; }
 
-    protected void SetUpdated()
+    public void SetUpdated()
     {
         UpdatedAt = DateTime.UtcNow;
     }

@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using CulinaryAssistant.Application.DTOs;
 using CulinaryAssistant.Domain.Enums;
 
 namespace CulinaryAssistant.UI.Converters;
@@ -255,7 +256,7 @@ public class ExpirationToColorConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is Application.DTOs.InventoryItemDto item)
+        if (value is InventoryItemDto item)
         {
             if (item.IsExpired)
                 return new SolidColorBrush(Color.FromRgb(196, 43, 28));   // Red - expired

@@ -1,11 +1,11 @@
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\bin\Debug\net8.0\CulinaryAssistant.Domain.deps.json
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\bin\Debug\net8.0\CulinaryAssistant.Domain.dll
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\bin\Debug\net8.0\CulinaryAssistant.Domain.pdb
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.AssemblyInfoInputs.cache
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.AssemblyInfo.cs
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.csproj.CoreCompileInputs.cache
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.dll
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\refint\CulinaryAssistant.Domain.dll
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.pdb
-C:\Users\molot\Downloads\CulinaryAssistant (1)\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\ref\CulinaryAssistant.Domain.dll
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\bin\Debug\net8.0\CulinaryAssistant.Domain.deps.json
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\bin\Debug\net8.0\CulinaryAssistant.Domain.dll
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\bin\Debug\net8.0\CulinaryAssistant.Domain.pdb
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.AssemblyInfoInputs.cache
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.AssemblyInfo.cs
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.csproj.CoreCompileInputs.cache
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.dll
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\refint\CulinaryAssistant.Domain.dll
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\CulinaryAssistant.Domain.pdb
+C:\Users\molot\Downloads\CulinaryAssistant_v2\CulinaryAssistant\CulinaryAssistant.Domain\obj\Debug\net8.0\ref\CulinaryAssistant.Domain.dll

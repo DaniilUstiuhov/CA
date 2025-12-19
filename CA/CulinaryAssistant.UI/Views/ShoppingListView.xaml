@@ -116,20 +116,20 @@
         </Border>
         
         <!-- Детали выбранного списка -->
-        <Border Grid.Column="1" 
-                Background="{DynamicResource CardBrush}" 
+        <Border Grid.Column="1"
+                Background="{DynamicResource CardBrush}"
                 CornerRadius="12">
-            
-            <!-- Нет выбранного списка -->
-            <TextBlock Text="Выберите список покупок"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontSize="16"
-                       Foreground="{DynamicResource MutedTextBrush}"
-                       Visibility="{Binding HasSelectedList, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
-            
-            <!-- Выбранный список -->
-            <Grid Visibility="{Binding HasSelectedList, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid>
+                <!-- Нет выбранного списка -->
+                <TextBlock Text="Выберите список покупок"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           Foreground="{DynamicResource MutedTextBrush}"
+                           Visibility="{Binding HasSelectedList, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                <!-- Выбранный список -->
+                <Grid Visibility="{Binding HasSelectedList, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -268,6 +268,7 @@
                                 Style="{DynamicResource PrimaryButtonStyle}"/>
                     </Grid>
                 </Border>
+            </Grid>
             </Grid>
         </Border>
     </Grid>

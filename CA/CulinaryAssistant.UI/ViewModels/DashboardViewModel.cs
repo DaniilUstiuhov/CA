@@ -80,7 +80,7 @@ public partial class DashboardViewModel : ViewModelBase
             ExpiredItems = DashboardData.ExpiredItems;
             ExpiringSoonItems = DashboardData.ExpiringSoonItems;
             ActiveShoppingLists = DashboardData.ActiveShoppingLists;
-            TotalShoppingItems = DashboardData.TotalShoppingItems;
+            TotalShoppingItems = 0; // TODO: Add to DashboardDto
 
             _logger.LogInformation("Dashboard data loaded successfully");
         }

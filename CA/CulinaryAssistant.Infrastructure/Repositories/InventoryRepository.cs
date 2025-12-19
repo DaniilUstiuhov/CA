@@ -16,7 +16,7 @@ public class InventoryRepository : Repository<InventoryItem>, IInventoryReposito
     {
         return await _dbSet
             .AsNoTracking()
-            .Where(i => i.ExpirationDate.HasValue && i.ExpirationDate.Value.Date < DateTime.Today)
+            .Where(i => i.ExpirationDate.Date < DateTime.Today)
             .OrderBy(i => i.ExpirationDate)
             .ToListAsync(cancellationToken);
     }
@@ -26,11 +26,34 @@ public class InventoryRepository : Repository<InventoryItem>, IInventoryReposito
         var thresholdDate = DateTime.Today.AddDays(daysThreshold);
         return await _dbSet
             .AsNoTracking()
-            .Where(i => i.ExpirationDate.HasValue && 
-                        i.ExpirationDate.Value.Date >= DateTime.Today &&
-                        i.ExpirationDate.Value.Date <= thresholdDate)
+            .Where(i => i.ExpirationDate.Date >= DateTime.Today &&
+                        i.ExpirationDate.Date <= thresholdDate)
             .OrderBy(i => i.ExpirationDate)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<InventoryItem>> SearchByNameAsync(string searchTerm, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(i => i.Name.ToLower().Contains(searchTerm.ToLower()))
+            .OrderBy(i => i.Name)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<InventoryItem>> GetByStorageLocationAsync(string location, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(i => i.StorageLocation != null && i.StorageLocation.ToLower().Contains(location.ToLower()))
+            .OrderBy(i => i.Name)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<InventoryItem?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .FirstOrDefaultAsync(i => i.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 
     public async Task<IReadOnlyList<InventoryItem>> SearchAsync(
@@ -56,18 +79,17 @@ public class InventoryRepository : Repository<InventoryItem>, IInventoryReposito
 
         if (expiredOnly == true)
         {
-            query = query.Where(i => i.ExpirationDate.HasValue && i.ExpirationDate.Value.Date < DateTime.Today);
+            query = query.Where(i => i.ExpirationDate.Date < DateTime.Today);
         }
         else if (expiringSoon == true)
         {
             var threshold = DateTime.Today.AddDays(3);
-            query = query.Where(i => i.ExpirationDate.HasValue &&
-                                     i.ExpirationDate.Value.Date >= DateTime.Today &&
-                                     i.ExpirationDate.Value.Date <= threshold);
+            query = query.Where(i => i.ExpirationDate.Date >= DateTime.Today &&
+                                     i.ExpirationDate.Date <= threshold);
         }
 
         return await query
-            .OrderBy(i => i.ExpirationDate ?? DateTime.MaxValue)
+            .OrderBy(i => i.ExpirationDate)
             .ThenBy(i => i.Name)
             .ToListAsync(cancellationToken);
     }
@@ -87,7 +109,7 @@ public class InventoryRepository : Repository<InventoryItem>, IInventoryReposito
     {
         return await _dbSet
             .AsNoTracking()
-            .OrderBy(i => i.ExpirationDate ?? DateTime.MaxValue)
+            .OrderBy(i => i.ExpirationDate)
             .ThenBy(i => i.Name)
             .ToListAsync(cancellationToken);
     }

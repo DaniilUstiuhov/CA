@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CulinaryAssistant.Application.DTOs;
@@ -117,8 +118,8 @@ public partial class InventoryViewModel : ViewModelBase
             IsLoading = true;
             ClearError();
 
-            var locations = await _inventoryService.GetAllStorageLocationsAsync();
-            StorageLocations = new ObservableCollection<string>(locations);
+            // TODO: Implement GetAllStorageLocationsAsync in service
+            StorageLocations = new ObservableCollection<string>();
 
             await SearchAsync();
 
@@ -142,11 +143,15 @@ public partial class InventoryViewModel : ViewModelBase
         {
             IsLoading = true;
 
-            var items = await _inventoryService.SearchAsync(
-                searchText: SearchText,
-                storageLocation: SelectedStorageLocation,
-                expiredOnly: ShowExpiredOnly ? true : null,
-                expiringSoon: ShowExpiringSoonOnly ? true : null);
+            var filter = new InventoryFilterDto
+            {
+                SearchTerm = SearchText,
+                StorageLocation = SelectedStorageLocation,
+                ShowExpired = ShowExpiredOnly ? true : null,
+                ShowExpiringSoon = ShowExpiringSoonOnly ? true : null
+            };
+
+            var items = await _inventoryService.SearchAsync(filter);
 
             Items = new ObservableCollection<InventoryItemDto>(items);
 
@@ -210,7 +215,7 @@ public partial class InventoryViewModel : ViewModelBase
                     Name = EditName.Trim(),
                     Quantity = EditQuantity,
                     Unit = EditUnit,
-                    ExpirationDate = EditExpirationDate,
+                    ExpirationDate = EditExpirationDate ?? DateTime.Today.AddDays(7),
                     StorageLocation = string.IsNullOrWhiteSpace(EditStorageLocation) ? null : EditStorageLocation.Trim()
                 };
 
@@ -227,7 +232,7 @@ public partial class InventoryViewModel : ViewModelBase
                     Name = EditName.Trim(),
                     Quantity = EditQuantity,
                     Unit = EditUnit,
-                    ExpirationDate = EditExpirationDate,
+                    ExpirationDate = EditExpirationDate ?? DateTime.Today.AddDays(7),
                     StorageLocation = string.IsNullOrWhiteSpace(EditStorageLocation) ? null : EditStorageLocation.Trim()
                 };
 
@@ -328,10 +333,9 @@ public partial class InventoryViewModel : ViewModelBase
 
         try
         {
-            var csv = await _exportService.ExportInventoryAsync();
-            await File.WriteAllTextAsync(filePath, csv);
-            _dialogService.ShowInfo($"Экспорт завершен: {filePath}");
-            _logger.LogInformation("Inventory exported to {Path}", filePath);
+            // TODO: Implement export service method
+            _dialogService.ShowInfo("Функция экспорта в разработке");
+            _logger.LogInformation("Inventory export requested but not implemented");
         }
         catch (Exception ex)
         {

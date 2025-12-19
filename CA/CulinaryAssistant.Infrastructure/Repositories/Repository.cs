@@ -38,7 +38,7 @@ public class Repository<T> : IRepository<T> where T : Entity
     public virtual Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         _context.Entry(entity).State = EntityState.Modified;
-        entity.UpdateTimestamp();
+        entity.SetUpdated();
         return Task.CompletedTask;
     }
 
@@ -46,5 +46,15 @@ public class Repository<T> : IRepository<T> where T : Entity
     {
         _dbSet.Remove(entity);
         return Task.CompletedTask;
+    }
+
+    public virtual async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.AnyAsync(e => e.Id == id, cancellationToken);
+    }
+
+    public virtual async Task<int> CountAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.CountAsync(cancellationToken);
     }
 }

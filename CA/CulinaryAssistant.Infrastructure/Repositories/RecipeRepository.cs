@@ -31,6 +31,22 @@ public class RecipeRepository : Repository<Recipe>, IRecipeRepository
             .FirstOrDefaultAsync(r => r.Code == code, cancellationToken);
     }
 
+    public async Task<Recipe?> GetWithIngredientsAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(r => r.Ingredients)
+            .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
+    }
+
+    public async Task<Recipe?> GetWithAllRelationsAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(r => r.Ingredients)
+            .Include(r => r.RecipeCategories)
+                .ThenInclude(rc => rc.Category)
+            .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Recipe>> GetByStatusAsync(RecipeStatus status, CancellationToken cancellationToken = default)
     {
         return await _dbSet
@@ -43,12 +59,47 @@ public class RecipeRepository : Repository<Recipe>, IRecipeRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<Recipe>> GetByCuisineAsync(string cuisine, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(r => r.Ingredients)
+            .Include(r => r.RecipeCategories)
+                .ThenInclude(rc => rc.Category)
+            .Where(r => r.Cuisine.ToLower().Contains(cuisine.ToLower()))
+            .OrderByDescending(r => r.UpdatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Recipe>> GetByDishTypeAsync(DishType dishType, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(r => r.Ingredients)
+            .Include(r => r.RecipeCategories)
+                .ThenInclude(rc => rc.Category)
+            .Where(r => r.DishType == dishType)
+            .OrderByDescending(r => r.UpdatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Recipe>> GetByCategoryAsync(int categoryId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(r => r.Ingredients)
+            .Include(r => r.RecipeCategories)
+                .ThenInclude(rc => rc.Category)
+            .Where(r => r.RecipeCategories.Any(rc => rc.CategoryId == categoryId))
+            .OrderByDescending(r => r.UpdatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Recipe>> SearchAsync(
-        string? searchText = null,
-        DishType? dishType = null,
-        RecipeStatus? status = null,
-        string? cuisine = null,
-        int? categoryId = null,
+        string? searchTerm,
+        RecipeStatus? status,
+        DishType? dishType,
+        string? cuisine,
         CancellationToken cancellationToken = default)
     {
         var query = _dbSet
@@ -58,26 +109,23 @@ public class RecipeRepository : Repository<Recipe>, IRecipeRepository
                 .ThenInclude(rc => rc.Category)
             .AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(searchText))
+        if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            searchText = searchText.ToLower();
+            searchTerm = searchTerm.ToLower();
             query = query.Where(r =>
-                r.Name.ToLower().Contains(searchText) ||
-                r.Description.ToLower().Contains(searchText) ||
-                r.Code.ToLower().Contains(searchText));
+                r.Name.ToLower().Contains(searchTerm) ||
+                r.Description.ToLower().Contains(searchTerm) ||
+                r.Code.ToLower().Contains(searchTerm));
         }
-
-        if (dishType.HasValue)
-            query = query.Where(r => r.DishType == dishType.Value);
 
         if (status.HasValue)
             query = query.Where(r => r.Status == status.Value);
 
+        if (dishType.HasValue)
+            query = query.Where(r => r.DishType == dishType.Value);
+
         if (!string.IsNullOrWhiteSpace(cuisine))
             query = query.Where(r => r.Cuisine.ToLower().Contains(cuisine.ToLower()));
-
-        if (categoryId.HasValue)
-            query = query.Where(r => r.RecipeCategories.Any(rc => rc.CategoryId == categoryId.Value));
 
         return await query
             .OrderByDescending(r => r.UpdatedAt)

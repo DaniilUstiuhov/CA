@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "p5GOfDUqsw4=",
+  "dgSpecHash": "S2YR3McCQp0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj",
+  "projectFilePath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\molot\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.22\\microsoft.windowsdesktop.app.ref.8.0.22.nupkg.sha512",
     "C:\\Users\\molot\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.22\\microsoft.netcore.app.ref.8.0.22.nupkg.sha512",

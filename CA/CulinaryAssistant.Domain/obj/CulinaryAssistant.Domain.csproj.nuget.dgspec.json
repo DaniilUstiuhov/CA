@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj": {}
+    "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj": {
+    "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj",
         "projectName": "CulinaryAssistant.Domain",
-        "projectPath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj",
+        "projectPath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Domain\\CulinaryAssistant.Domain.csproj",
         "packagesPath": "C:\\Users\\molot\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Domain\\obj\\",
+        "outputPath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

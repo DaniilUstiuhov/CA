@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cooK/6hoyLU=",
+  "dgSpecHash": "Nnle9jLfj/c=",
   "success": true,
-  "projectFilePath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Application\\CulinaryAssistant.Application.csproj",
+  "projectFilePath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Application\\CulinaryAssistant.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\molot\\.nuget\\packages\\fluentvalidation\\11.9.0\\fluentvalidation.11.9.0.nupkg.sha512",
     "C:\\Users\\molot\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.1\\microsoft.extensions.dependencyinjection.abstractions.8.0.1.nupkg.sha512",

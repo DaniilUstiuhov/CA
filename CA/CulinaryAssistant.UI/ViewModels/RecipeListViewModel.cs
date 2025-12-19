@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CulinaryAssistant.Application.DTOs;
@@ -22,10 +23,10 @@ public partial class RecipeListViewModel : ViewModelBase
     private readonly ILogger<RecipeListViewModel> _logger;
 
     [ObservableProperty]
-    private ObservableCollection<RecipeDto> _recipes = new();
+    private ObservableCollection<RecipeListItemDto> _recipes = new();
 
     [ObservableProperty]
-    private RecipeDto? _selectedRecipe;
+    private RecipeListItemDto? _selectedRecipe;
 
     [ObservableProperty]
     private ObservableCollection<CategoryDto> _categories = new();
@@ -133,14 +134,18 @@ public partial class RecipeListViewModel : ViewModelBase
         {
             IsLoading = true;
 
-            var recipes = await _recipeService.SearchAsync(
-                searchText: SearchText,
-                dishType: SelectedDishType,
-                status: SelectedStatus,
-                cuisine: SelectedCuisine,
-                categoryId: SelectedCategory?.Id);
+            var filter = new RecipeFilterDto
+            {
+                SearchTerm = SearchText,
+                DishType = SelectedDishType,
+                Status = SelectedStatus,
+                Cuisine = SelectedCuisine,
+                CategoryId = SelectedCategory?.Id
+            };
 
-            Recipes = new ObservableCollection<RecipeDto>(recipes);
+            var recipes = await _recipeService.SearchAsync(filter);
+
+            Recipes = new ObservableCollection<RecipeListItemDto>(recipes);
 
             _logger.LogInformation("Search completed, found {Count} recipes", recipes.Count);
         }
@@ -162,14 +167,14 @@ public partial class RecipeListViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void EditRecipe(RecipeDto? recipe)
+    private void EditRecipe(RecipeListItemDto? recipe)
     {
         if (recipe == null) return;
         _navigationService.NavigateTo("RecipeDetail", recipe.Id);
     }
 
     [RelayCommand]
-    private async Task DeleteRecipeAsync(RecipeDto? recipe)
+    private async Task DeleteRecipeAsync(RecipeListItemDto? recipe)
     {
         if (recipe == null) return;
 
@@ -261,10 +266,9 @@ public partial class RecipeListViewModel : ViewModelBase
 
         try
         {
-            var csv = await _exportService.ExportRecipesAsync();
-            await File.WriteAllTextAsync(filePath, csv);
-            _dialogService.ShowInfo($"Экспорт завершен: {filePath}");
-            _logger.LogInformation("Recipes exported to {Path}", filePath);
+            // TODO: Implement export service method
+            _dialogService.ShowInfo("Функция экспорта в разработке");
+            _logger.LogInformation("Export requested but not implemented");
         }
         catch (Exception ex)
         {
@@ -274,7 +278,7 @@ public partial class RecipeListViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task ExportRecipeDetailAsync(RecipeDto? recipe)
+    private async Task ExportRecipeDetailAsync(RecipeListItemDto? recipe)
     {
         if (recipe == null) return;
 
@@ -286,10 +290,9 @@ public partial class RecipeListViewModel : ViewModelBase
 
         try
         {
-            var csv = await _exportService.ExportRecipeDetailAsync(recipe.Id);
-            await File.WriteAllTextAsync(filePath, csv);
-            _dialogService.ShowInfo($"Экспорт завершен: {filePath}");
-            _logger.LogInformation("Recipe {Id} exported to {Path}", recipe.Id, filePath);
+            // TODO: Implement export service method
+            _dialogService.ShowInfo("Функция экспорта в разработке");
+            _logger.LogInformation("Recipe {Id} export requested but not implemented", recipe.Id);
         }
         catch (Exception ex)
         {

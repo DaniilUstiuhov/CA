@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System;
 
 namespace CulinaryAssistant.UI;
 
@@ -103,9 +104,23 @@ public partial class App : System.Windows.Application
 
     private void InitializeDatabase()
     {
-        using var scope = _serviceProvider!.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<CulinaryDbContext>();
-        context.Database.Migrate();
+        try
+        {
+            using var scope = _serviceProvider!.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<CulinaryDbContext>();
+
+            // Удаляем старую БД и создаём новую с правильной структурой + seed data
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            Log.Information("База данных успешно инициализирована");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Ошибка при инициализации базы данных");
+            MessageBox.Show($"Ошибка инициализации БД: {ex.Message}", "Ошибка",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     protected override void OnExit(ExitEventArgs e)

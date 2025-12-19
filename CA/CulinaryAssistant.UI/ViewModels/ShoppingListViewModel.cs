@@ -15,7 +15,7 @@ public partial class ShoppingListViewModel : ObservableObject
     private readonly ILogger<ShoppingListViewModel> _logger;
 
     [ObservableProperty]
-    private ObservableCollection<ShoppingListDto> _shoppingLists = new();
+    private ObservableCollection<ShoppingListSummaryDto> _shoppingLists = new();
 
     [ObservableProperty]
     private ShoppingListDto? _selectedList;
@@ -51,11 +51,12 @@ public partial class ShoppingListViewModel : ObservableObject
             _logger.LogInformation("Loading shopping lists");
 
             var lists = await _shoppingListService.GetAllAsync();
-            ShoppingLists = new ObservableCollection<ShoppingListDto>(lists);
+            ShoppingLists = new ObservableCollection<ShoppingListSummaryDto>(lists);
 
             if (SelectedList != null)
             {
-                SelectedList = ShoppingLists.FirstOrDefault(l => l.Id == SelectedList.Id);
+                var refreshed = await _shoppingListService.GetByIdAsync(SelectedList.Id);
+                SelectedList = refreshed;
             }
         }
         catch (Exception ex)
@@ -75,7 +76,7 @@ public partial class ShoppingListViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task SelectListAsync(ShoppingListDto list)
+    private async Task SelectListAsync(ShoppingListSummaryDto list)
     {
         try
         {
@@ -97,11 +98,12 @@ public partial class ShoppingListViewModel : ObservableObject
             var dto = new ShoppingListCreateDto { Name = name };
             var created = await _shoppingListService.CreateAsync(dto);
             
-            ShoppingLists.Insert(0, new ShoppingListDto
+            ShoppingLists.Insert(0, new ShoppingListSummaryDto
             {
                 Id = created.Id,
                 Name = created.Name,
                 IsCompleted = false,
+                CreatedAt = created.CreatedAt,
                 TotalItems = 0,
                 PurchasedItems = 0,
                 CompletionPercentage = 0
@@ -149,10 +151,6 @@ public partial class ShoppingListViewModel : ObservableObject
             }
 
             await LoadAsync();
-            if (SelectedList != null)
-            {
-                SelectedList = ShoppingLists.FirstOrDefault(l => l.Id == SelectedList.Id);
-            }
         }
         catch (Exception ex)
         {
@@ -167,7 +165,7 @@ public partial class ShoppingListViewModel : ObservableObject
 
         try
         {
-            if (!decimal.TryParse(NewItemQuantity, out var quantity))
+            if (!double.TryParse(NewItemQuantity, out var quantity))
                 quantity = 1;
 
             var itemDto = new ShoppingItemCreateDto
@@ -191,14 +189,15 @@ public partial class ShoppingListViewModel : ObservableObject
             if (listInCollection != null)
             {
                 var index = ShoppingLists.IndexOf(listInCollection);
-                ShoppingLists[index] = new ShoppingListDto
+                ShoppingLists[index] = new ShoppingListSummaryDto
                 {
                     Id = fullList!.Id,
                     Name = fullList.Name,
                     IsCompleted = fullList.IsCompleted,
                     TotalItems = fullList.TotalItems,
                     PurchasedItems = fullList.PurchasedItems,
-                    CompletionPercentage = fullList.CompletionPercentage
+                    CompletionPercentage = fullList.CompletionPercentage,
+                    CreatedAt = fullList.CreatedAt
                 };
             }
         }
@@ -235,7 +234,10 @@ public partial class ShoppingListViewModel : ObservableObject
 
         try
         {
-            await _shoppingListService.ToggleItemPurchasedAsync(SelectedList.Id, item.Id);
+            if (item.IsPurchased)
+                await _shoppingListService.MarkItemNotPurchasedAsync(SelectedList.Id, item.Id);
+            else
+                await _shoppingListService.MarkItemPurchasedAsync(SelectedList.Id, item.Id);
             
             var fullList = await _shoppingListService.GetByIdAsync(SelectedList.Id);
             SelectedList = fullList;
@@ -245,14 +247,15 @@ public partial class ShoppingListViewModel : ObservableObject
             if (listInCollection != null)
             {
                 var index = ShoppingLists.IndexOf(listInCollection);
-                ShoppingLists[index] = new ShoppingListDto
+                ShoppingLists[index] = new ShoppingListSummaryDto
                 {
                     Id = fullList!.Id,
                     Name = fullList.Name,
                     IsCompleted = fullList.IsCompleted,
                     TotalItems = fullList.TotalItems,
                     PurchasedItems = fullList.PurchasedItems,
-                    CompletionPercentage = fullList.CompletionPercentage
+                    CompletionPercentage = fullList.CompletionPercentage,
+                    CreatedAt = fullList.CreatedAt
                 };
             }
         }

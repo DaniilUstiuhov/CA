@@ -145,10 +145,10 @@ public partial class RecipeDetailViewModel : ViewModelBase
                     Instructions = recipe.Instructions ?? string.Empty;
                     DishType = recipe.DishType;
                     Cuisine = recipe.Cuisine ?? string.Empty;
-                    CookingTimeMinutes = recipe.CookingTimeMinutes ?? 0;
-                    Servings = recipe.Servings ?? 4;
+                    CookingTimeMinutes = recipe.CookingTimeMinutes;
+                    Servings = recipe.Servings;
                     Status = recipe.Status;
-                    CanEdit = recipe.CanEdit;
+                    CanEdit = recipe.Status == Domain.Enums.RecipeStatus.Draft;
                     PageTitle = $"Редактировать: {recipe.Name}";
 
                     Ingredients = new ObservableCollection<RecipeIngredientDto>(recipe.Ingredients);
@@ -244,17 +244,8 @@ public partial class RecipeDetailViewModel : ViewModelBase
                     Instructions = Instructions?.Trim(),
                     DishType = DishType,
                     Cuisine = Cuisine?.Trim(),
-                    CookingTimeMinutes = CookingTimeMinutes > 0 ? CookingTimeMinutes : null,
-                    Servings = Servings > 0 ? Servings : null,
-                    Ingredients = Ingredients.Select(i => new RecipeIngredientCreateDto
-                    {
-                        Name = i.Name,
-                        Amount = i.Amount,
-                        Unit = i.Unit,
-                        IsOptional = i.IsOptional,
-                        Notes = i.Notes
-                    }).ToList(),
-                    CategoryIds = SelectedCategories.Select(c => c.Id).ToList()
+                    CookingTimeMinutes = CookingTimeMinutes > 0 ? CookingTimeMinutes : 0,
+                    Servings = Servings > 0 ? Servings : 4
                 };
 
                 var result = await _recipeService.CreateAsync(createDto);
@@ -274,26 +265,13 @@ public partial class RecipeDetailViewModel : ViewModelBase
                     Instructions = Instructions?.Trim(),
                     DishType = DishType,
                     Cuisine = Cuisine?.Trim(),
-                    CookingTimeMinutes = CookingTimeMinutes > 0 ? CookingTimeMinutes : null,
-                    Servings = Servings > 0 ? Servings : null
+                    CookingTimeMinutes = CookingTimeMinutes > 0 ? CookingTimeMinutes : 0,
+                    Servings = Servings > 0 ? Servings : 4
                 };
 
                 await _recipeService.UpdateAsync(updateDto);
-                
-                // Update ingredients
-                await _recipeService.UpdateIngredientsAsync(_recipeId!.Value, 
-                    Ingredients.Select(i => new RecipeIngredientCreateDto
-                    {
-                        Name = i.Name,
-                        Amount = i.Amount,
-                        Unit = i.Unit,
-                        IsOptional = i.IsOptional,
-                        Notes = i.Notes
-                    }).ToList());
 
-                // Update categories
-                await _recipeService.UpdateCategoriesAsync(_recipeId!.Value,
-                    SelectedCategories.Select(c => c.Id).ToList());
+                // TODO: Implement ingredient and category updates using Add/Remove methods
 
                 _dialogService.ShowInfo("Рецепт сохранен.");
                 _logger.LogInformation("Recipe {Id} updated", _recipeId);

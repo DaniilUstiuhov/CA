@@ -46,6 +46,16 @@ public class ShoppingListRepository : Repository<ShoppingList>, IShoppingListRep
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<ShoppingList>> SearchByNameAsync(string searchTerm, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(sl => sl.Items)
+            .Where(sl => sl.Name.ToLower().Contains(searchTerm.ToLower()))
+            .OrderByDescending(sl => sl.UpdatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
     public override async Task<IReadOnlyList<ShoppingList>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet

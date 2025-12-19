@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KmtY6Wd4cK0=",
+  "dgSpecHash": "EcyV2Hxecp8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.Infrastructure\\CulinaryAssistant.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.Infrastructure\\CulinaryAssistant.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\molot\\.nuget\\packages\\fluentvalidation\\11.9.0\\fluentvalidation.11.9.0.nupkg.sha512",
     "C:\\Users\\molot\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

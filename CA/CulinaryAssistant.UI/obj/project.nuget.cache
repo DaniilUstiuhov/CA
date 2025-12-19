@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mI0yLGBRvug=",
+  "dgSpecHash": "1LZW03ovTcM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\molot\\Downloads\\CulinaryAssistant (1)\\CulinaryAssistant\\CulinaryAssistant.UI\\CulinaryAssistant.UI.csproj",
+  "projectFilePath": "C:\\Users\\molot\\Favorites\\Desktop\\CA\\CA\\CA\\CA\\CulinaryAssistant.UI\\CulinaryAssistant.UI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\molot\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.2\\communitytoolkit.mvvm.8.2.2.nupkg.sha512",
     "C:\\Users\\molot\\.nuget\\packages\\fluentvalidation\\11.9.0\\fluentvalidation.11.9.0.nupkg.sha512",

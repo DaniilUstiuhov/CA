@@ -18,6 +18,15 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
             .FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 
+    public async Task<IReadOnlyList<Category>> GetCategoriesWithRecipeCountAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(c => c.RecipeCategories)
+            .OrderBy(c => c.Name)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> NameExistsAsync(string name, int? excludeId = null, CancellationToken cancellationToken = default)
     {
         var query = _dbSet.Where(c => c.Name.ToLower() == name.ToLower());
