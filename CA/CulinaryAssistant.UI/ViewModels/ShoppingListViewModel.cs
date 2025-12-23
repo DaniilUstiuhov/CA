@@ -8,6 +8,38 @@ using System.Collections.ObjectModel;
 
 namespace CulinaryAssistant.UI.ViewModels;
 
+public partial class ShoppingItemViewModel : ObservableObject
+{
+    private readonly ShoppingItemDto _dto;
+    private readonly Action<ShoppingItemViewModel> _onPurchasedChanged;
+
+    public int Id => _dto.Id;
+    public string Name => _dto.Name;
+    public double Quantity => _dto.Quantity;
+    public MeasurementUnit Unit => _dto.Unit;
+    public DateTime? PurchasedAt => _dto.PurchasedAt;
+    public decimal? EstimatedPrice => _dto.EstimatedPrice;
+    public string? PreferredStore => _dto.PreferredStore;
+    public string? Notes => _dto.Notes;
+    public bool HasPrice => EstimatedPrice.HasValue && EstimatedPrice.Value > 0;
+    public bool HasStore => !string.IsNullOrWhiteSpace(PreferredStore);
+
+    [ObservableProperty]
+    private bool _isPurchased;
+
+    public ShoppingItemViewModel(ShoppingItemDto dto, Action<ShoppingItemViewModel> onPurchasedChanged)
+    {
+        _dto = dto;
+        _onPurchasedChanged = onPurchasedChanged;
+        _isPurchased = dto.IsPurchased;
+    }
+
+    partial void OnIsPurchasedChanged(bool value)
+    {
+        _onPurchasedChanged(this);
+    }
+}
+
 public partial class ShoppingListViewModel : ObservableObject
 {
     private readonly IShoppingListService _shoppingListService;
@@ -19,6 +51,9 @@ public partial class ShoppingListViewModel : ObservableObject
 
     [ObservableProperty]
     private ShoppingListDto? _selectedList;
+
+    [ObservableProperty]
+    private ObservableCollection<ShoppingItemViewModel> _items = new();
 
     [ObservableProperty]
     private string _newItemName = string.Empty;
@@ -73,6 +108,53 @@ public partial class ShoppingListViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(HasSelectedList));
         OnPropertyChanged(nameof(CompleteButtonText));
+
+        if (value != null)
+        {
+            Items = new ObservableCollection<ShoppingItemViewModel>(
+                value.Items.Select(item => new ShoppingItemViewModel(item, OnItemPurchasedChanged)));
+        }
+        else
+        {
+            Items.Clear();
+        }
+    }
+
+    private async void OnItemPurchasedChanged(ShoppingItemViewModel item)
+    {
+        if (SelectedList == null) return;
+
+        try
+        {
+            if (item.IsPurchased)
+                await _shoppingListService.MarkItemPurchasedAsync(SelectedList.Id, item.Id);
+            else
+                await _shoppingListService.MarkItemNotPurchasedAsync(SelectedList.Id, item.Id);
+
+            var fullList = await _shoppingListService.GetByIdAsync(SelectedList.Id);
+            SelectedList = fullList;
+
+            // Update the list in the sidebar
+            var listInCollection = ShoppingLists.FirstOrDefault(l => l.Id == SelectedList!.Id);
+            if (listInCollection != null)
+            {
+                var index = ShoppingLists.IndexOf(listInCollection);
+                ShoppingLists[index] = new ShoppingListSummaryDto
+                {
+                    Id = fullList!.Id,
+                    Name = fullList.Name,
+                    IsCompleted = fullList.IsCompleted,
+                    TotalItems = fullList.TotalItems,
+                    PurchasedItems = fullList.PurchasedItems,
+                    CompletionPercentage = fullList.CompletionPercentage,
+                    CreatedAt = fullList.CreatedAt
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error toggling item purchase status");
+        }
     }
 
     [RelayCommand]
@@ -208,14 +290,14 @@ public partial class ShoppingListViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task RemoveItemAsync(ShoppingItemDto item)
+    private async Task RemoveItemAsync(ShoppingItemViewModel item)
     {
         if (SelectedList == null) return;
 
         try
         {
             await _shoppingListService.RemoveItemAsync(SelectedList.Id, item.Id);
-            
+
             var fullList = await _shoppingListService.GetByIdAsync(SelectedList.Id);
             SelectedList = fullList;
 
@@ -224,44 +306,6 @@ public partial class ShoppingListViewModel : ObservableObject
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error removing item from shopping list");
-        }
-    }
-
-    [RelayCommand]
-    private async Task ToggleItemAsync(ShoppingItemDto item)
-    {
-        if (SelectedList == null) return;
-
-        try
-        {
-            if (item.IsPurchased)
-                await _shoppingListService.MarkItemNotPurchasedAsync(SelectedList.Id, item.Id);
-            else
-                await _shoppingListService.MarkItemPurchasedAsync(SelectedList.Id, item.Id);
-            
-            var fullList = await _shoppingListService.GetByIdAsync(SelectedList.Id);
-            SelectedList = fullList;
-
-            // Update the list in the sidebar
-            var listInCollection = ShoppingLists.FirstOrDefault(l => l.Id == SelectedList!.Id);
-            if (listInCollection != null)
-            {
-                var index = ShoppingLists.IndexOf(listInCollection);
-                ShoppingLists[index] = new ShoppingListSummaryDto
-                {
-                    Id = fullList!.Id,
-                    Name = fullList.Name,
-                    IsCompleted = fullList.IsCompleted,
-                    TotalItems = fullList.TotalItems,
-                    PurchasedItems = fullList.PurchasedItems,
-                    CompletionPercentage = fullList.CompletionPercentage,
-                    CreatedAt = fullList.CreatedAt
-                };
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error toggling item purchase status");
         }
     }
 
