@@ -108,13 +108,13 @@
                       HeadersVisibility="Column"
                       Background="Transparent"
                       BorderThickness="0"
-                      Foreground="White">
+                      Foreground="Black">
                 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Foreground" Value="Black"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="Padding" Value="8"/>
                             </Style>
@@ -129,7 +129,7 @@
                         </DataGridTextColumn.Binding>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Foreground" Value="Black"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="Padding" Value="8"/>
                             </Style>
@@ -138,7 +138,7 @@
                     <DataGridTextColumn Header="Место хранения" Binding="{Binding StorageLocation}" Width="150">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Foreground" Value="Black"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="Padding" Value="8"/>
                             </Style>
@@ -147,7 +147,7 @@
                     <DataGridTextColumn Header="Срок годности" Binding="{Binding ExpirationDate, StringFormat='dd.MM.yyyy'}" Width="120">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Foreground" Value="Black"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="Padding" Value="8"/>
                             </Style>
@@ -160,7 +160,7 @@
                                         Background="{Binding ., Converter={StaticResource ExpirationToColorConverter}}"
                                         HorizontalAlignment="Left"
                                         Margin="4">
-                                    <TextBlock Foreground="White" FontSize="11">
+                                    <TextBlock Foreground="Black" FontSize="11">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Text" Value="В норме"/>
