@@ -10,9 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CulinaryAssistant.UI.ViewModels;
 
-/// <summary>
-/// Inventory ViewModel - manage inventory items with expiration tracking
-/// </summary>
 public partial class InventoryViewModel : ViewModelBase
 {
     private readonly IInventoryService _inventoryService;
@@ -69,7 +66,7 @@ public partial class InventoryViewModel : ViewModelBase
     public int ExpiredCount => Items.Count(i => i.IsExpired);
     public int ExpiringSoonCount => Items.Count(i => i.IsExpiringSoon && !i.IsExpired);
 
-    public ObservableCollection<InventoryItemDto> FilteredItems => Items;
+    public string EditFormTitle => EditingItemId == null ? "Новый продукт" : "Редактирование";
 
     public InventoryViewModel(
         IInventoryService inventoryService,
@@ -86,6 +83,26 @@ public partial class InventoryViewModel : ViewModelBase
     public async Task LoadAsync()
     {
         await LoadDataAsync();
+    }
+
+    partial void OnSearchTextChanged(string? value)
+    {
+        SearchCommand.Execute(null);
+    }
+
+    partial void OnShowExpiredOnlyChanged(bool value)
+    {
+        SearchCommand.Execute(null);
+    }
+
+    partial void OnShowExpiringSoonOnlyChanged(bool value)
+    {
+        SearchCommand.Execute(null);
+    }
+
+    partial void OnEditingItemIdChanged(int? value)
+    {
+        OnPropertyChanged(nameof(EditFormTitle));
     }
 
     [RelayCommand]
@@ -118,7 +135,6 @@ public partial class InventoryViewModel : ViewModelBase
             IsLoading = true;
             ClearError();
 
-            // TODO: Implement GetAllStorageLocationsAsync in service
             StorageLocations = new ObservableCollection<string>();
 
             await SearchAsync();
@@ -154,6 +170,8 @@ public partial class InventoryViewModel : ViewModelBase
             var items = await _inventoryService.SearchAsync(filter);
 
             Items = new ObservableCollection<InventoryItemDto>(items);
+            OnPropertyChanged(nameof(ExpiredCount));
+            OnPropertyChanged(nameof(ExpiringSoonCount));
 
             _logger.LogInformation("Search completed, found {Count} items", items.Count);
         }
@@ -209,7 +227,6 @@ public partial class InventoryViewModel : ViewModelBase
 
             if (EditingItemId == null)
             {
-                // Create new
                 var createDto = new InventoryItemCreateDto
                 {
                     Name = EditName.Trim(),
@@ -225,7 +242,6 @@ public partial class InventoryViewModel : ViewModelBase
             }
             else
             {
-                // Update existing
                 var updateDto = new InventoryItemUpdateDto
                 {
                     Id = EditingItemId.Value,
@@ -274,6 +290,8 @@ public partial class InventoryViewModel : ViewModelBase
         {
             await _inventoryService.DeleteAsync(item.Id);
             Items.Remove(item);
+            OnPropertyChanged(nameof(ExpiredCount));
+            OnPropertyChanged(nameof(ExpiringSoonCount));
             _dialogService.ShowInfo("Продукт удален.");
             _logger.LogInformation("Inventory item {Id} deleted", item.Id);
         }
@@ -291,7 +309,6 @@ public partial class InventoryViewModel : ViewModelBase
 
         try
         {
-            // Use 1 unit
             await _inventoryService.UseItemAsync(item.Id, 1);
             await SearchAsync();
             _logger.LogInformation("Used 1 unit of item {Id}", item.Id);
@@ -310,7 +327,6 @@ public partial class InventoryViewModel : ViewModelBase
 
         try
         {
-            // Add 1 unit
             await _inventoryService.ReplenishItemAsync(item.Id, 1);
             await SearchAsync();
             _logger.LogInformation("Replenished 1 unit of item {Id}", item.Id);
@@ -333,7 +349,6 @@ public partial class InventoryViewModel : ViewModelBase
 
         try
         {
-            // TODO: Implement export service method
             _dialogService.ShowInfo("Функция экспорта в разработке");
             _logger.LogInformation("Inventory export requested but not implemented");
         }

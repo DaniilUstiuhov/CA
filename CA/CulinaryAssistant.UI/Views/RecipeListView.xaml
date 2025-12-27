@@ -9,6 +9,7 @@
     <UserControl.Resources>
         <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
         <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
     
     <Grid>
@@ -38,12 +39,14 @@
             <Button Grid.Column="1" 
                     Content="+ Новый рецепт" 
                     Command="{Binding CreateRecipeCommand}"
-                    Style="{DynamicResource PrimaryButtonStyle}"/>
+                    Background="#0078D4"
+                    Foreground="White"
+                    Padding="16,8"/>
         </Grid>
         
         <!-- Фильтры -->
         <Border Grid.Row="1" 
-                Background="{DynamicResource CardBrush}" 
+                Background="#2D2D30" 
                 CornerRadius="12" 
                 Padding="16" 
                 Margin="0,0,0,16">
@@ -58,30 +61,40 @@
                 <!-- Поиск -->
                 <TextBox Grid.Column="0" 
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{DynamicResource SearchTextBoxStyle}"
+                         Padding="8"
                          Margin="0,0,12,0"/>
                 
                 <!-- Фильтр по статусу -->
                 <ComboBox Grid.Column="1" 
                           ItemsSource="{Binding Statuses}"
                           SelectedItem="{Binding SelectedStatus}"
-                          DisplayMemberPath="."
                           Width="150"
-                          Margin="0,0,12,0"/>
+                          Margin="0,0,12,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 
                 <!-- Фильтр по типу блюда -->
                 <ComboBox Grid.Column="2" 
                           ItemsSource="{Binding DishTypes}"
                           SelectedItem="{Binding SelectedDishType}"
-                          DisplayMemberPath="."
                           Width="150"
-                          Margin="0,0,12,0"/>
+                          Margin="0,0,12,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 
                 <!-- Кнопка сброса -->
                 <Button Grid.Column="3" 
                         Content="Сбросить" 
                         Command="{Binding ResetFiltersCommand}"
-                        Style="{DynamicResource SecondaryButtonStyle}"/>
+                        Padding="16,8"/>
             </Grid>
         </Border>
         
@@ -90,7 +103,7 @@
             <ItemsControl ItemsSource="{Binding Recipes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="{DynamicResource CardBrush}" 
+                        <Border Background="#2D2D30" 
                                 CornerRadius="12" 
                                 Padding="20" 
                                 Margin="0,0,0,12"
@@ -111,7 +124,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Name}" 
                                                    FontSize="18" FontWeight="SemiBold"
-                                                   Foreground="{DynamicResource TextBrush}"/>
+                                                   Foreground="White"/>
                                         <Border Background="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
                                                 CornerRadius="4" Padding="8,2" Margin="12,0,0,0"
                                                 VerticalAlignment="Center">
@@ -123,24 +136,24 @@
                                     <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                                         <TextBlock Text="{Binding Cuisine}" 
                                                    FontSize="13" 
-                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                                   Foreground="Gray"/>
                                         <TextBlock Text=" · " 
                                                    FontSize="13" 
-                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                                   Foreground="Gray"/>
                                         <TextBlock Text="{Binding DishType, Converter={StaticResource EnumToStringConverter}}" 
                                                    FontSize="13" 
-                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                                   Foreground="Gray"/>
                                         <TextBlock Text=" · " 
                                                    FontSize="13" 
-                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                                   Foreground="Gray"/>
                                         <TextBlock Text="{Binding CookingTimeMinutes, StringFormat='{}{0} мин'}" 
                                                    FontSize="13" 
-                                                   Foreground="{DynamicResource MutedTextBrush}"/>
+                                                   Foreground="Gray"/>
                                     </StackPanel>
                                     
                                     <TextBlock Text="{Binding Code, StringFormat='Код: {0}'}" 
                                                FontSize="12" 
-                                               Foreground="{DynamicResource MutedTextBrush}"
+                                               Foreground="Gray"
                                                Margin="0,6,0,0"/>
                                 </StackPanel>
                                 
@@ -151,13 +164,13 @@
                                             ToolTip="Редактировать"
                                             Command="{Binding DataContext.EditRecipeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}"
-                                            Style="{DynamicResource IconButtonStyle}"
+                                            Width="36" Height="36"
                                             Margin="0,0,8,0"/>
                                     <Button Content="🗑️" 
                                             ToolTip="Удалить"
                                             Command="{Binding DataContext.DeleteRecipeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}"
-                                            Style="{DynamicResource IconButtonStyle}"/>
+                                            Width="36" Height="36"/>
                                 </StackPanel>
                             </Grid>
                         </Border>

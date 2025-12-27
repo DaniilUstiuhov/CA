@@ -9,9 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CulinaryAssistant.UI.ViewModels;
 
-/// <summary>
-/// Recipe detail ViewModel - add/edit recipe with ingredients
-/// </summary>
 public partial class RecipeDetailViewModel : ViewModelBase
 {
     private readonly IRecipeService _recipeService;
@@ -92,6 +89,14 @@ public partial class RecipeDetailViewModel : ViewModelBase
     [ObservableProperty]
     private CategoryDto? _categoryToAdd;
 
+    // Computed properties for button visibility
+    public bool CanPublish => !IsNewRecipe && Status == RecipeStatus.Draft;
+    public bool CanArchive => !IsNewRecipe && Status == RecipeStatus.Published;
+    public bool CanRestore => !IsNewRecipe && Status == RecipeStatus.Archived;
+    public bool CanReturnToDraft => !IsNewRecipe && Status == RecipeStatus.Published;
+    public bool IsEditing => IsNewRecipe || CanEdit;
+    public bool HasNoIngredients => Ingredients.Count == 0;
+
     // Enum values for ComboBoxes
     public IEnumerable<DishType> DishTypes => Enum.GetValues<DishType>();
     public IEnumerable<MeasurementUnit> MeasurementUnits => Enum.GetValues<MeasurementUnit>();
@@ -109,7 +114,6 @@ public partial class RecipeDetailViewModel : ViewModelBase
         _dialogService = dialogService;
         _logger = logger;
 
-        // Check if we have a recipe ID to load
         var parameter = navigationService.CurrentParameter;
         if (parameter is int id)
         {
@@ -121,6 +125,34 @@ public partial class RecipeDetailViewModel : ViewModelBase
         LoadDataCommand.Execute(null);
     }
 
+    partial void OnStatusChanged(RecipeStatus value)
+    {
+        OnPropertyChanged(nameof(CanPublish));
+        OnPropertyChanged(nameof(CanArchive));
+        OnPropertyChanged(nameof(CanRestore));
+        OnPropertyChanged(nameof(CanReturnToDraft));
+        OnPropertyChanged(nameof(IsEditing));
+    }
+
+    partial void OnIsNewRecipeChanged(bool value)
+    {
+        OnPropertyChanged(nameof(CanPublish));
+        OnPropertyChanged(nameof(CanArchive));
+        OnPropertyChanged(nameof(CanRestore));
+        OnPropertyChanged(nameof(CanReturnToDraft));
+        OnPropertyChanged(nameof(IsEditing));
+    }
+
+    partial void OnCanEditChanged(bool value)
+    {
+        OnPropertyChanged(nameof(IsEditing));
+    }
+
+    partial void OnIngredientsChanged(ObservableCollection<RecipeIngredientDto> value)
+    {
+        OnPropertyChanged(nameof(HasNoIngredients));
+    }
+
     [RelayCommand]
     private async Task LoadDataAsync()
     {
@@ -129,11 +161,9 @@ public partial class RecipeDetailViewModel : ViewModelBase
             IsLoading = true;
             ClearError();
 
-            // Load categories
             var categories = await _categoryService.GetAllAsync();
             AllCategories = new ObservableCollection<CategoryDto>(categories);
 
-            // Load existing recipe if editing
             if (_recipeId.HasValue)
             {
                 var recipe = await _recipeService.GetByIdAsync(_recipeId.Value);
@@ -148,7 +178,7 @@ public partial class RecipeDetailViewModel : ViewModelBase
                     CookingTimeMinutes = recipe.CookingTimeMinutes;
                     Servings = recipe.Servings;
                     Status = recipe.Status;
-                    CanEdit = recipe.Status == Domain.Enums.RecipeStatus.Draft;
+                    CanEdit = recipe.Status == RecipeStatus.Draft;
                     PageTitle = $"Редактировать: {recipe.Name}";
 
                     Ingredients = new ObservableCollection<RecipeIngredientDto>(recipe.Ingredients);
@@ -188,8 +218,8 @@ public partial class RecipeDetailViewModel : ViewModelBase
         };
 
         Ingredients.Add(ingredient);
+        OnPropertyChanged(nameof(HasNoIngredients));
 
-        // Clear form
         NewIngredientName = string.Empty;
         NewIngredientAmount = 1;
         NewIngredientUnit = MeasurementUnit.Gram;
@@ -203,6 +233,7 @@ public partial class RecipeDetailViewModel : ViewModelBase
         if (ingredient != null)
         {
             Ingredients.Remove(ingredient);
+            OnPropertyChanged(nameof(HasNoIngredients));
         }
     }
 
@@ -251,6 +282,20 @@ public partial class RecipeDetailViewModel : ViewModelBase
                 var result = await _recipeService.CreateAsync(createDto);
                 _recipeId = result.Id;
                 IsNewRecipe = false;
+
+                // Add ingredients
+                foreach (var ingredient in Ingredients)
+                {
+                    await _recipeService.AddIngredientAsync(_recipeId.Value, new RecipeIngredientCreateDto
+                    {
+                        Name = ingredient.Name,
+                        Amount = ingredient.Amount,
+                        Unit = ingredient.Unit,
+                        IsOptional = ingredient.IsOptional,
+                        Notes = ingredient.Notes
+                    });
+                }
+
                 _dialogService.ShowInfo("Рецепт создан.");
                 _logger.LogInformation("Recipe created with ID {Id}", result.Id);
             }
@@ -270,9 +315,6 @@ public partial class RecipeDetailViewModel : ViewModelBase
                 };
 
                 await _recipeService.UpdateAsync(updateDto);
-
-                // TODO: Implement ingredient and category updates using Add/Remove methods
-
                 _dialogService.ShowInfo("Рецепт сохранен.");
                 _logger.LogInformation("Recipe {Id} updated", _recipeId);
             }
@@ -288,6 +330,12 @@ public partial class RecipeDetailViewModel : ViewModelBase
         {
             IsLoading = false;
         }
+    }
+
+    [RelayCommand]
+    private void GoBack()
+    {
+        _navigationService.NavigateTo("Recipes");
     }
 
     [RelayCommand]
@@ -313,6 +361,46 @@ public partial class RecipeDetailViewModel : ViewModelBase
         {
             _logger.LogError(ex, "Error publishing recipe");
             _dialogService.ShowError("Не удалось опубликовать: " + ex.Message);
+        }
+    }
+
+    [RelayCommand]
+    private async Task ArchiveAsync()
+    {
+        if (_recipeId == null) return;
+
+        try
+        {
+            await _recipeService.ArchiveAsync(_recipeId.Value);
+            Status = RecipeStatus.Archived;
+            CanEdit = false;
+            _dialogService.ShowInfo("Рецепт архивирован.");
+            _logger.LogInformation("Recipe {Id} archived", _recipeId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error archiving recipe");
+            _dialogService.ShowError("Не удалось архивировать: " + ex.Message);
+        }
+    }
+
+    [RelayCommand]
+    private async Task RestoreAsync()
+    {
+        if (_recipeId == null) return;
+
+        try
+        {
+            await _recipeService.RestoreAsync(_recipeId.Value);
+            Status = RecipeStatus.Draft;
+            CanEdit = true;
+            _dialogService.ShowInfo("Рецепт восстановлен.");
+            _logger.LogInformation("Recipe {Id} restored", _recipeId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error restoring recipe");
+            _dialogService.ShowError("Не удалось восстановить: " + ex.Message);
         }
     }
 

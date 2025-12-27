@@ -18,6 +18,7 @@
             <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
             <converters:ExpirationToColorConverter x:Key="ExpirationToColorConverter"/>
             <converters:ProgressToWidthConverter x:Key="ProgressToWidthConverter"/>
+            <converters:PercentToWidthConverter x:Key="PercentToWidthConverter"/>
             
             <!-- Colors -->
             <Color x:Key="PrimaryColor">#0078D4</Color>

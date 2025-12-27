@@ -7,9 +7,6 @@ using CulinaryAssistant.Domain.Enums;
 
 namespace CulinaryAssistant.UI.Converters;
 
-/// <summary>
-/// Bool to Visibility converter
-/// </summary>
 public class BoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -23,9 +20,6 @@ public class BoolToVisibilityConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Inverse Bool to Visibility converter
-/// </summary>
 public class InverseBoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -39,9 +33,6 @@ public class InverseBoolToVisibilityConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Null to Visibility converter
-/// </summary>
 public class NullToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -55,9 +46,6 @@ public class NullToVisibilityConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Enum to string converter
-/// </summary>
 public class EnumToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -106,9 +94,6 @@ public class EnumToStringConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Recipe status to color converter
-/// </summary>
 public class StatusToColorConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -117,9 +102,9 @@ public class StatusToColorConverter : IValueConverter
         {
             return status switch
             {
-                RecipeStatus.Draft => new SolidColorBrush(Color.FromRgb(255, 185, 0)),     // Warning Yellow
-                RecipeStatus.Published => new SolidColorBrush(Color.FromRgb(16, 137, 62)), // Success Green
-                RecipeStatus.Archived => new SolidColorBrush(Color.FromRgb(96, 94, 92)),   // Secondary Gray
+                RecipeStatus.Draft => new SolidColorBrush(Color.FromRgb(255, 185, 0)),
+                RecipeStatus.Published => new SolidColorBrush(Color.FromRgb(16, 137, 62)),
+                RecipeStatus.Archived => new SolidColorBrush(Color.FromRgb(96, 94, 92)),
                 _ => new SolidColorBrush(Colors.Gray)
             };
         }
@@ -132,9 +117,6 @@ public class StatusToColorConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Date to string converter
-/// </summary>
 public class DateToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -143,15 +125,15 @@ public class DateToStringConverter : IValueConverter
         {
             if (parameter is string format)
                 return date.ToString(format);
-            
+
             return date.ToString("dd.MM.yyyy");
         }
-        
+
         if (value is DateOnly dateOnly)
         {
             return dateOnly.ToString("dd.MM.yyyy");
         }
-        
+
         return string.Empty;
     }
 
@@ -163,9 +145,6 @@ public class DateToStringConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Bool to string converter (Да/Нет)
-/// </summary>
 public class BoolToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -188,9 +167,6 @@ public class BoolToStringConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Expiration status converter
-/// </summary>
 public class ExpirationStatusConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -198,16 +174,16 @@ public class ExpirationStatusConverter : IValueConverter
         if (value is DateTime expDate)
         {
             var daysUntil = (expDate.Date - DateTime.Today).Days;
-            
+
             if (targetType == typeof(Brush) || targetType == typeof(SolidColorBrush))
             {
                 if (daysUntil < 0)
-                    return new SolidColorBrush(Color.FromRgb(196, 43, 28));  // Red - expired
+                    return new SolidColorBrush(Color.FromRgb(196, 43, 28));
                 if (daysUntil <= 3)
-                    return new SolidColorBrush(Color.FromRgb(255, 185, 0));  // Yellow - expiring soon
-                return new SolidColorBrush(Color.FromRgb(16, 137, 62));       // Green - OK
+                    return new SolidColorBrush(Color.FromRgb(255, 185, 0));
+                return new SolidColorBrush(Color.FromRgb(16, 137, 62));
             }
-            
+
             if (daysUntil < 0)
                 return $"Просрочено ({Math.Abs(daysUntil)} дн.)";
             if (daysUntil == 0)
@@ -225,9 +201,6 @@ public class ExpirationStatusConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Shopping list completion percentage to color
-/// </summary>
 public class CompletionToColorConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -235,10 +208,10 @@ public class CompletionToColorConverter : IValueConverter
         if (value is double percentage)
         {
             if (percentage >= 100)
-                return new SolidColorBrush(Color.FromRgb(16, 137, 62));   // Green - complete
+                return new SolidColorBrush(Color.FromRgb(16, 137, 62));
             if (percentage >= 50)
-                return new SolidColorBrush(Color.FromRgb(0, 120, 212));   // Blue - in progress
-            return new SolidColorBrush(Color.FromRgb(96, 94, 92));        // Gray - just started
+                return new SolidColorBrush(Color.FromRgb(0, 120, 212));
+            return new SolidColorBrush(Color.FromRgb(96, 94, 92));
         }
         return new SolidColorBrush(Colors.Gray);
     }
@@ -249,9 +222,6 @@ public class CompletionToColorConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Expiration to color converter for inventory items
-/// </summary>
 public class ExpirationToColorConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -259,10 +229,10 @@ public class ExpirationToColorConverter : IValueConverter
         if (value is InventoryItemDto item)
         {
             if (item.IsExpired)
-                return new SolidColorBrush(Color.FromRgb(196, 43, 28));   // Red - expired
+                return new SolidColorBrush(Color.FromRgb(196, 43, 28));
             if (item.IsExpiringSoon)
-                return new SolidColorBrush(Color.FromRgb(255, 185, 0));   // Yellow - expiring soon
-            return new SolidColorBrush(Color.FromRgb(16, 137, 62));       // Green - OK
+                return new SolidColorBrush(Color.FromRgb(255, 185, 0));
+            return new SolidColorBrush(Color.FromRgb(16, 137, 62));
         }
         return new SolidColorBrush(Color.FromRgb(16, 137, 62));
     }
@@ -273,15 +243,12 @@ public class ExpirationToColorConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Progress percentage to width converter (for progress bars)
-/// </summary>
 public class ProgressToWidthConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-        if (values.Length >= 2 && 
-            values[0] is double percentage && 
+        if (values.Length >= 2 &&
+            values[0] is double percentage &&
             values[1] is double totalWidth)
         {
             return totalWidth * (percentage / 100.0);
@@ -290,6 +257,28 @@ public class ProgressToWidthConverter : IMultiValueConverter
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class PercentToWidthConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is double percentage)
+        {
+            double maxWidth = 260;
+            if (parameter is string paramStr && double.TryParse(paramStr, out double parsed))
+            {
+                maxWidth = parsed;
+            }
+            return maxWidth * (percentage / 100.0);
+        }
+        return 0.0;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

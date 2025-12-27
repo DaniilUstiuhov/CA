@@ -30,47 +30,49 @@
             <Button Grid.Column="0" 
                     Content="← Назад" 
                     Command="{Binding GoBackCommand}"
-                    Style="{DynamicResource SecondaryButtonStyle}"
+                    Padding="12,8"
                     Margin="0,0,16,0"/>
             
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="{Binding Recipe.Name, FallbackValue='Новый рецепт'}" 
+                <TextBlock Text="{Binding Name, FallbackValue='Новый рецепт'}" 
                            FontSize="24" FontWeight="Bold" 
                            Foreground="{DynamicResource TextBrush}"/>
-                <Border Background="{Binding Recipe.Status, Converter={StaticResource StatusToColorConverter}}"
+                <Border Background="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
                         CornerRadius="4" Padding="10,4" Margin="16,0,0,0"
                         VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Recipe.Status, Converter={StaticResource EnumToStringConverter}}" 
+                    <TextBlock Text="{Binding Status, Converter={StaticResource EnumToStringConverter}}" 
                                FontSize="12" Foreground="White"/>
                 </Border>
             </StackPanel>
             
             <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <!-- Кнопки workflow -->
                 <Button Content="Опубликовать" 
                         Command="{Binding PublishCommand}"
                         Visibility="{Binding CanPublish, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Style="{DynamicResource SuccessButtonStyle}"
+                        Background="#10893E" Foreground="White"
+                        Padding="12,8"
                         Margin="0,0,8,0"/>
                 <Button Content="В архив" 
                         Command="{Binding ArchiveCommand}"
                         Visibility="{Binding CanArchive, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Style="{DynamicResource WarningButtonStyle}"
+                        Background="#FFB900" Foreground="Black"
+                        Padding="12,8"
                         Margin="0,0,8,0"/>
                 <Button Content="Восстановить" 
                         Command="{Binding RestoreCommand}"
                         Visibility="{Binding CanRestore, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Style="{DynamicResource SecondaryButtonStyle}"
+                        Padding="12,8"
                         Margin="0,0,8,0"/>
                 <Button Content="В черновик" 
                         Command="{Binding ReturnToDraftCommand}"
                         Visibility="{Binding CanReturnToDraft, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Style="{DynamicResource SecondaryButtonStyle}"
+                        Padding="12,8"
                         Margin="0,0,8,0"/>
                 <Button Content="💾 Сохранить" 
                         Command="{Binding SaveCommand}"
                         Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Style="{DynamicResource PrimaryButtonStyle}"/>
+                        Background="#0078D4" Foreground="White"
+                        Padding="12,8"/>
             </StackPanel>
         </Grid>
         
@@ -84,12 +86,12 @@
                 <!-- Основная информация -->
                 <StackPanel Grid.Column="0" Margin="0,0,24,0">
                     <!-- Основные поля -->
-                    <Border Background="{DynamicResource CardBrush}" 
+                    <Border Background="#2D2D30" 
                             CornerRadius="12" Padding="24" Margin="0,0,0,16">
                         <StackPanel>
                             <TextBlock Text="Основная информация" 
                                        FontSize="16" FontWeight="SemiBold" 
-                                       Foreground="{DynamicResource TextBrush}"
+                                       Foreground="White"
                                        Margin="0,0,0,16"/>
                             
                             <Grid>
@@ -105,112 +107,146 @@
                                 
                                 <!-- Код -->
                                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,12,16">
-                                    <TextBlock Text="Код рецепта" Style="{DynamicResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Recipe.Code, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Text="Код рецепта" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <TextBox Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}"
                                              IsEnabled="{Binding IsNewRecipe}"
-                                             Style="{DynamicResource TextBoxStyle}"/>
+                                             Padding="8"/>
                                 </StackPanel>
                                 
                                 <!-- Название -->
                                 <StackPanel Grid.Row="0" Grid.Column="1" Margin="12,0,0,16">
-                                    <TextBlock Text="Название" Style="{DynamicResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Recipe.Name, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Text="Название" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                              IsEnabled="{Binding CanEdit}"
-                                             Style="{DynamicResource TextBoxStyle}"/>
+                                             Padding="8"/>
                                 </StackPanel>
                                 
                                 <!-- Кухня -->
                                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,12,16">
-                                    <TextBlock Text="Кухня" Style="{DynamicResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Recipe.Cuisine, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Text="Кухня" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <TextBox Text="{Binding Cuisine, UpdateSourceTrigger=PropertyChanged}"
                                              IsEnabled="{Binding CanEdit}"
-                                             Style="{DynamicResource TextBoxStyle}"/>
+                                             Padding="8"/>
                                 </StackPanel>
                                 
                                 <!-- Тип блюда -->
                                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="12,0,0,16">
-                                    <TextBlock Text="Тип блюда" Style="{DynamicResource LabelStyle}"/>
+                                    <TextBlock Text="Тип блюда" Foreground="Gray" Margin="0,0,0,4"/>
                                     <ComboBox ItemsSource="{Binding DishTypes}"
-                                              SelectedItem="{Binding Recipe.DishType}"
+                                              SelectedItem="{Binding DishType}"
                                               IsEnabled="{Binding CanEdit}"
-                                              Style="{DynamicResource ComboBoxStyle}"/>
+                                              Padding="8">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </StackPanel>
                                 
                                 <!-- Время приготовления -->
                                 <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,12,0">
-                                    <TextBlock Text="Время (мин)" Style="{DynamicResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Recipe.CookingTimeMinutes, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Text="Время (мин)" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <TextBox Text="{Binding CookingTimeMinutes, UpdateSourceTrigger=PropertyChanged}"
                                              IsEnabled="{Binding CanEdit}"
-                                             Style="{DynamicResource TextBoxStyle}"/>
+                                             Padding="8"/>
                                 </StackPanel>
                                 
                                 <!-- Порции -->
                                 <StackPanel Grid.Row="2" Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBlock Text="Порций" Style="{DynamicResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Recipe.Servings, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Text="Порции" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <TextBox Text="{Binding Servings, UpdateSourceTrigger=PropertyChanged}"
                                              IsEnabled="{Binding CanEdit}"
-                                             Style="{DynamicResource TextBoxStyle}"/>
+                                             Padding="8"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
                     </Border>
                     
                     <!-- Описание -->
-                    <Border Background="{DynamicResource CardBrush}" 
+                    <Border Background="#2D2D30" 
                             CornerRadius="12" Padding="24" Margin="0,0,0,16">
                         <StackPanel>
                             <TextBlock Text="Описание" 
                                        FontSize="16" FontWeight="SemiBold" 
-                                       Foreground="{DynamicResource TextBrush}"
+                                       Foreground="White"
                                        Margin="0,0,0,12"/>
-                            <TextBox Text="{Binding Recipe.Description, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding CanEdit}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
                                      MinHeight="80"
-                                     Style="{DynamicResource TextBoxStyle}"/>
+                                     Padding="8"/>
                         </StackPanel>
                     </Border>
                     
                     <!-- Инструкции -->
-                    <Border Background="{DynamicResource CardBrush}" 
+                    <Border Background="#2D2D30" 
                             CornerRadius="12" Padding="24">
                         <StackPanel>
                             <TextBlock Text="Инструкции по приготовлению" 
                                        FontSize="16" FontWeight="SemiBold" 
-                                       Foreground="{DynamicResource TextBrush}"
+                                       Foreground="White"
                                        Margin="0,0,0,12"/>
-                            <TextBox Text="{Binding Recipe.Instructions, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding Instructions, UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding CanEdit}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
                                      MinHeight="200"
-                                     Style="{DynamicResource TextBoxStyle}"/>
+                                     Padding="8"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
                 
-                <!-- Боковая панель - ингредиенты и категории -->
+                <!-- Боковая панель - ингредиенты -->
                 <StackPanel Grid.Column="1">
                     <!-- Ингредиенты -->
-                    <Border Background="{DynamicResource CardBrush}" 
+                    <Border Background="#2D2D30" 
                             CornerRadius="12" Padding="20" Margin="0,0,0,16">
                         <StackPanel>
-                            <Grid Margin="0,0,0,12">
-                                <TextBlock Text="Ингредиенты" 
-                                           FontSize="16" FontWeight="SemiBold" 
-                                           Foreground="{DynamicResource TextBrush}"/>
-                                <Button Content="+" 
-                                        Command="{Binding AddIngredientCommand}"
-                                        Visibility="{Binding CanEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                                        HorizontalAlignment="Right"
-                                        Style="{DynamicResource IconButtonStyle}"/>
-                            </Grid>
+                            <TextBlock Text="Ингредиенты" 
+                                       FontSize="16" FontWeight="SemiBold" 
+                                       Foreground="White"
+                                       Margin="0,0,0,12"/>
                             
-                            <ItemsControl ItemsSource="{Binding Recipe.Ingredients}">
+                            <!-- Форма добавления ингредиента -->
+                            <Border Background="#1E1E1E" CornerRadius="8" Padding="12" Margin="0,0,0,12"
+                                    Visibility="{Binding CanEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <StackPanel>
+                                    <TextBox Text="{Binding NewIngredientName, UpdateSourceTrigger=PropertyChanged}"
+                                             Padding="8" Margin="0,0,0,8"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0" 
+                                                 Text="{Binding NewIngredientAmount, UpdateSourceTrigger=PropertyChanged}"
+                                                 Padding="8" Margin="0,0,4,0"/>
+                                        <ComboBox Grid.Column="1" 
+                                                  ItemsSource="{Binding MeasurementUnits}"
+                                                  SelectedItem="{Binding NewIngredientUnit}"
+                                                  Margin="4,0,0,0">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </Grid>
+                                    <Button Content="+ Добавить ингредиент" 
+                                            Command="{Binding AddIngredientCommand}"
+                                            Background="#0078D4" Foreground="White"
+                                            Padding="8" Margin="0,8,0,0"
+                                            HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Список ингредиентов -->
+                            <ItemsControl ItemsSource="{Binding Ingredients}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="{DynamicResource BackgroundBrush}" 
+                                        <Border Background="#1E1E1E" 
                                                 CornerRadius="8" Padding="12" Margin="0,0,0,8">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -220,8 +256,8 @@
                                                 
                                                 <StackPanel Grid.Column="0">
                                                     <TextBlock Text="{Binding Name}" FontWeight="Medium"
-                                                               Foreground="{DynamicResource TextBrush}"/>
-                                                    <TextBlock FontSize="12" Foreground="{DynamicResource MutedTextBrush}">
+                                                               Foreground="White"/>
+                                                    <TextBlock FontSize="12" Foreground="Gray">
                                                         <Run Text="{Binding Amount}"/>
                                                         <Run Text=" "/>
                                                         <Run Text="{Binding Unit, Converter={StaticResource EnumToStringConverter}}"/>
@@ -232,7 +268,7 @@
                                                         Command="{Binding DataContext.RemoveIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                         CommandParameter="{Binding}"
                                                         Visibility="{Binding DataContext.CanEdit, RelativeSource={RelativeSource AncestorType=ItemsControl}, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                        Style="{DynamicResource IconButtonStyle}"/>
+                                                        Width="28" Height="28"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>
@@ -241,19 +277,19 @@
                             
                             <TextBlock Text="Нет ингредиентов" 
                                        FontSize="13" 
-                                       Foreground="{DynamicResource MutedTextBrush}"
+                                       Foreground="Gray"
                                        HorizontalAlignment="Center"
                                        Visibility="{Binding HasNoIngredients, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </StackPanel>
                     </Border>
                     
                     <!-- Категории -->
-                    <Border Background="{DynamicResource CardBrush}" 
+                    <Border Background="#2D2D30" 
                             CornerRadius="12" Padding="20">
                         <StackPanel>
                             <TextBlock Text="Категории" 
                                        FontSize="16" FontWeight="SemiBold" 
-                                       Foreground="{DynamicResource TextBrush}"
+                                       Foreground="White"
                                        Margin="0,0,0,12"/>
                             
                             <ItemsControl ItemsSource="{Binding AllCategories}">
@@ -265,8 +301,8 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <CheckBox Content="{Binding Name}"
-                                                  IsChecked="{Binding IsSelected}"
                                                   IsEnabled="{Binding DataContext.CanEdit, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                  Foreground="White"
                                                   Margin="0,0,12,8"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

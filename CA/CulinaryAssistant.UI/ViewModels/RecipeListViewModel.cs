@@ -10,9 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CulinaryAssistant.UI.ViewModels;
 
-/// <summary>
-/// Recipe list ViewModel - master view with filtering
-/// </summary>
 public partial class RecipeListViewModel : ViewModelBase
 {
     private readonly IRecipeService _recipeService;
@@ -50,7 +47,6 @@ public partial class RecipeListViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedCuisine;
 
-    // Enum values for ComboBoxes
     public IEnumerable<DishType?> DishTypes => new DishType?[] { null }
         .Concat(Enum.GetValues<DishType>().Cast<DishType?>());
 
@@ -78,6 +74,21 @@ public partial class RecipeListViewModel : ViewModelBase
         await LoadDataAsync();
     }
 
+    partial void OnSearchTextChanged(string? value)
+    {
+        SearchCommand.Execute(null);
+    }
+
+    partial void OnSelectedDishTypeChanged(DishType? value)
+    {
+        SearchCommand.Execute(null);
+    }
+
+    partial void OnSelectedStatusChanged(RecipeStatus? value)
+    {
+        SearchCommand.Execute(null);
+    }
+
     [RelayCommand]
     private async Task ResetFiltersAsync()
     {
@@ -103,15 +114,12 @@ public partial class RecipeListViewModel : ViewModelBase
             IsLoading = true;
             ClearError();
 
-            // Load categories
             var categories = await _categoryService.GetAllAsync();
             Categories = new ObservableCollection<CategoryDto>(categories);
 
-            // Load cuisines
             var cuisines = await _recipeService.GetAllCuisinesAsync();
             Cuisines = new ObservableCollection<string>(cuisines);
 
-            // Load recipes
             await SearchAsync();
 
             _logger.LogInformation("Recipe list data loaded");
@@ -196,7 +204,7 @@ public partial class RecipeListViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task PublishRecipeAsync(RecipeDto? recipe)
+    private async Task PublishRecipeAsync(RecipeListItemDto? recipe)
     {
         if (recipe == null) return;
 
@@ -215,7 +223,7 @@ public partial class RecipeListViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task ArchiveRecipeAsync(RecipeDto? recipe)
+    private async Task ArchiveRecipeAsync(RecipeListItemDto? recipe)
     {
         if (recipe == null) return;
 
@@ -237,7 +245,7 @@ public partial class RecipeListViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task RestoreRecipeAsync(RecipeDto? recipe)
+    private async Task RestoreRecipeAsync(RecipeListItemDto? recipe)
     {
         if (recipe == null) return;
 
@@ -259,14 +267,13 @@ public partial class RecipeListViewModel : ViewModelBase
     private async Task ExportToCsvAsync()
     {
         var filePath = _dialogService.ShowSaveFileDialog(
-            "CSV файлы (*.csv)|*.csv", 
+            "CSV файлы (*.csv)|*.csv",
             "recipes_export.csv");
 
         if (string.IsNullOrEmpty(filePath)) return;
 
         try
         {
-            // TODO: Implement export service method
             _dialogService.ShowInfo("Функция экспорта в разработке");
             _logger.LogInformation("Export requested but not implemented");
         }
@@ -290,7 +297,6 @@ public partial class RecipeListViewModel : ViewModelBase
 
         try
         {
-            // TODO: Implement export service method
             _dialogService.ShowInfo("Функция экспорта в разработке");
             _logger.LogInformation("Recipe {Id} export requested but not implemented", recipe.Id);
         }

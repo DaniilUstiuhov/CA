@@ -8,210 +8,285 @@
     
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
         <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
         <converters:ExpirationToColorConverter x:Key="ExpirationToColorConverter"/>
     </UserControl.Resources>
     
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         
-        <!-- Заголовок -->
-        <Grid Grid.Row="0" Margin="0,0,0,20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <!-- Основная область -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             
-            <StackPanel Grid.Column="0">
-                <TextBlock Text="Инвентарь" 
-                           FontSize="28" FontWeight="Bold" 
-                           Foreground="{DynamicResource TextBrush}"/>
-                <TextBlock FontSize="14" 
-                           Foreground="{DynamicResource MutedTextBrush}"
-                           Margin="0,4,0,0">
-                    <Run Text="{Binding Items.Count, StringFormat='Всего: {0}', Mode=OneWay}"/>
-                    <Run Text=" · "/>
-                    <Run Text="{Binding ExpiredCount, StringFormat='Просрочено: {0}', Mode=OneWay}" Foreground="#C42B1C"/>
-                    <Run Text=" · "/>
-                    <Run Text="{Binding ExpiringSoonCount, StringFormat='Истекает: {0}', Mode=OneWay}" Foreground="#FFB900"/>
-                </TextBlock>
-            </StackPanel>
-            
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Button Content="📤 Экспорт CSV" 
-                        Command="{Binding ExportCommand}"
-                        Padding="16,8"
-                        Margin="0,0,12,0"/>
-                <Button Content="+ Добавить" 
-                        Command="{Binding AddItemCommand}"
-                        Background="#0078D4"
-                        Foreground="White"
-                        Padding="16,8"/>
-            </StackPanel>
-        </Grid>
-        
-        <!-- Фильтры -->
-        <Border Grid.Row="1" 
-                Background="#2D2D30" 
-                CornerRadius="12" 
-                Padding="16" 
-                Margin="0,0,0,16">
-            <Grid>
+            <!-- Заголовок -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <TextBox Grid.Column="0" 
-                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                         Padding="8"
-                         Margin="0,0,12,0"/>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Инвентарь" 
+                               FontSize="28" FontWeight="Bold" 
+                               Foreground="{DynamicResource TextBrush}"/>
+                    <TextBlock FontSize="14" 
+                               Foreground="{DynamicResource MutedTextBrush}"
+                               Margin="0,4,0,0">
+                        <Run Text="{Binding Items.Count, StringFormat='Всего: {0}', Mode=OneWay}"/>
+                        <Run Text=" · "/>
+                        <Run Text="{Binding ExpiredCount, StringFormat='Просрочено: {0}', Mode=OneWay}" Foreground="#C42B1C"/>
+                        <Run Text=" · "/>
+                        <Run Text="{Binding ExpiringSoonCount, StringFormat='Истекает: {0}', Mode=OneWay}" Foreground="#FFB900"/>
+                    </TextBlock>
+                </StackPanel>
                 
-                <CheckBox Grid.Column="1" 
-                          Content="Только просроченные"
-                          IsChecked="{Binding ShowExpiredOnly}"
-                          VerticalAlignment="Center"
-                          Foreground="White"
-                          Margin="0,0,12,0"/>
-                
-                <CheckBox Grid.Column="2" 
-                          Content="Истекает скоро"
-                          IsChecked="{Binding ShowExpiringSoonOnly}"
-                          VerticalAlignment="Center"
-                          Foreground="White"
-                          Margin="0,0,12,0"/>
-                
-                <Button Grid.Column="3" 
-                        Content="Сбросить" 
-                        Command="{Binding ResetFiltersCommand}"
-                        Padding="16,8"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="📤 Экспорт CSV" 
+                            Command="{Binding ExportCommand}"
+                            Padding="16,8"
+                            Margin="0,0,12,0"/>
+                    <Button Content="+ Добавить" 
+                            Command="{Binding AddItemCommand}"
+                            Background="#0078D4"
+                            Foreground="White"
+                            Padding="16,8"/>
+                </StackPanel>
             </Grid>
-        </Border>
+            
+            <!-- Фильтры -->
+            <Border Grid.Row="1" 
+                    Background="#2D2D30" 
+                    CornerRadius="12" 
+                    Padding="16" 
+                    Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox Grid.Column="0" 
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="8"
+                             Margin="0,0,12,0"/>
+                    
+                    <CheckBox Grid.Column="1" 
+                              Content="Только просроченные"
+                              IsChecked="{Binding ShowExpiredOnly}"
+                              VerticalAlignment="Center"
+                              Foreground="White"
+                              Margin="0,0,12,0"/>
+                    
+                    <CheckBox Grid.Column="2" 
+                              Content="Истекает скоро"
+                              IsChecked="{Binding ShowExpiringSoonOnly}"
+                              VerticalAlignment="Center"
+                              Foreground="White"
+                              Margin="0,0,12,0"/>
+                    
+                    <Button Grid.Column="3" 
+                            Content="Сбросить" 
+                            Command="{Binding ResetFiltersCommand}"
+                            Padding="16,8"/>
+                </Grid>
+            </Border>
+            
+            <!-- Таблица инвентаря -->
+            <Border Grid.Row="2" 
+                    Background="#2D2D30" 
+                    CornerRadius="12"
+                    Margin="0,0,16,0">
+                <DataGrid ItemsSource="{Binding Items}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Foreground="Black">
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="Black"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="8"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Количество" Width="120">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="Quantity"/>
+                                    <Binding Path="Unit" Converter="{StaticResource EnumToStringConverter}"/>
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="Black"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="8"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Место хранения" Binding="{Binding StorageLocation}" Width="150">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="Black"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="8"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Срок годности" Binding="{Binding ExpirationDate, StringFormat='dd.MM.yyyy'}" Width="120">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="Black"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="8"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Статус" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="4" Padding="8,4"
+                                            Background="{Binding ., Converter={StaticResource ExpirationToColorConverter}}"
+                                            HorizontalAlignment="Left"
+                                            Margin="4">
+                                        <TextBlock Foreground="White" FontSize="11">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="В норме"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsExpired}" Value="True">
+                                                            <Setter Property="Text" Value="Просрочено"/>
+                                                        </DataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsExpired}" Value="False"/>
+                                                                <Condition Binding="{Binding IsExpiringSoon}" Value="True"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="Истекает"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Действия" Width="160">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="4">
+                                        <Button Content="−" ToolTip="Использовать"
+                                                Command="{Binding DataContext.UseItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Width="28" Height="28"
+                                                Margin="0,0,4,0"/>
+                                        <Button Content="+" ToolTip="Пополнить"
+                                                Command="{Binding DataContext.ReplenishItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Width="28" Height="28"
+                                                Margin="0,0,4,0"/>
+                                        <Button Content="✏" ToolTip="Редактировать"
+                                                Command="{Binding DataContext.EditItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Width="28" Height="28"
+                                                Margin="0,0,4,0"/>
+                                        <Button Content="🗑" ToolTip="Удалить"
+                                                Command="{Binding DataContext.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Width="28" Height="28"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
         
-        <!-- Таблица инвентаря -->
-        <Border Grid.Row="2" 
+        <!-- Панель редактирования -->
+        <Border Grid.Column="1" 
                 Background="#2D2D30" 
-                CornerRadius="12">
-            <DataGrid ItemsSource="{Binding Items}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      IsReadOnly="True"
-                      SelectionMode="Single"
-                      GridLinesVisibility="Horizontal"
-                      HeadersVisibility="Column"
-                      Background="Transparent"
-                      BorderThickness="0"
-                      Foreground="Black">
+                CornerRadius="12" 
+                Padding="20"
+                Width="320"
+                Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel>
+                <TextBlock Text="{Binding EditFormTitle}" 
+                           FontSize="18" FontWeight="SemiBold" 
+                           Foreground="White"
+                           Margin="0,0,0,20"/>
                 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="8"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Количество" Width="120">
-                        <DataGridTextColumn.Binding>
-                            <MultiBinding StringFormat="{}{0} {1}">
-                                <Binding Path="Quantity"/>
-                                <Binding Path="Unit" Converter="{StaticResource EnumToStringConverter}"/>
-                            </MultiBinding>
-                        </DataGridTextColumn.Binding>
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="8"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Место хранения" Binding="{Binding StorageLocation}" Width="150">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="8"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Срок годности" Binding="{Binding ExpirationDate, StringFormat='dd.MM.yyyy'}" Width="120">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="8"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTemplateColumn Header="Статус" Width="120">
-                        <DataGridTemplateColumn.CellTemplate>
+                <!-- Название -->
+                <TextBlock Text="Название" Foreground="Gray" Margin="0,0,0,4"/>
+                <TextBox Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}"
+                         Padding="10" Margin="0,0,0,16"/>
+                
+                <!-- Количество и единица измерения -->
+                <TextBlock Text="Количество" Foreground="Gray" Margin="0,0,0,4"/>
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" 
+                             Text="{Binding EditQuantity, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="10" Margin="0,0,8,0"/>
+                    <ComboBox Grid.Column="1" 
+                              ItemsSource="{Binding MeasurementUnits}"
+                              SelectedItem="{Binding EditUnit}"
+                              Padding="10">
+                        <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <Border CornerRadius="4" Padding="8,4"
-                                        Background="{Binding ., Converter={StaticResource ExpirationToColorConverter}}"
-                                        HorizontalAlignment="Left"
-                                        Margin="4">
-                                    <TextBlock Foreground="Black" FontSize="11">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Text" Value="В норме"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsExpired}" Value="True">
-                                                        <Setter Property="Text" Value="Просрочено"/>
-                                                    </DataTrigger>
-                                                    <MultiDataTrigger>
-                                                        <MultiDataTrigger.Conditions>
-                                                            <Condition Binding="{Binding IsExpired}" Value="False"/>
-                                                            <Condition Binding="{Binding IsExpiringSoon}" Value="True"/>
-                                                        </MultiDataTrigger.Conditions>
-                                                        <Setter Property="Text" Value="Истекает"/>
-                                                    </MultiDataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </Border>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Действия" Width="160">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="4">
-                                    <Button Content="−" ToolTip="Использовать"
-                                            Command="{Binding DataContext.UseItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}"
-                                            Width="28" Height="28"
-                                            Margin="0,0,4,0"/>
-                                    <Button Content="+" ToolTip="Пополнить"
-                                            Command="{Binding DataContext.ReplenishItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}"
-                                            Width="28" Height="28"
-                                            Margin="0,0,4,0"/>
-                                    <Button Content="✏" ToolTip="Редактировать"
-                                            Command="{Binding DataContext.EditItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}"
-                                            Width="28" Height="28"
-                                            Margin="0,0,4,0"/>
-                                    <Button Content="🗑" ToolTip="Удалить"
-                                            Command="{Binding DataContext.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}"
-                                            Width="28" Height="28"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+                
+                <!-- Срок годности -->
+                <TextBlock Text="Срок годности" Foreground="Gray" Margin="0,0,0,4"/>
+                <DatePicker SelectedDate="{Binding EditExpirationDate}"
+                            Padding="10" Margin="0,0,0,16"/>
+                
+                <!-- Место хранения -->
+                <TextBlock Text="Место хранения" Foreground="Gray" Margin="0,0,0,4"/>
+                <TextBox Text="{Binding EditStorageLocation, UpdateSourceTrigger=PropertyChanged}"
+                         Padding="10" Margin="0,0,0,24"/>
+                
+                <!-- Кнопки -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Отмена" 
+                            Command="{Binding CancelEditCommand}"
+                            Padding="16,10"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Сохранить" 
+                            Command="{Binding SaveItemCommand}"
+                            Background="#0078D4"
+                            Foreground="White"
+                            Padding="16,10"/>
+                </StackPanel>
+            </StackPanel>
         </Border>
     </Grid>
 </UserControl>
